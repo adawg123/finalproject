@@ -1,0 +1,22 @@
+- name: Install wordpress
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      register: output
+      changed_when: output.stdout != ""
+    - setup: # aka gather_facts
+  vars:
+    ansible_ssh_user: ubuntu
+    ansible_ssh_private_key_file: ~/downloads/Ohio.pem
+  become: yes
+  # tasks:
+  #   - name: install python 2
+  #     raw: sudo apt install -y python2.7
+
+  roles:
+    - server
+    - php  
+    - mysql
+    - wordpress
